@@ -24,6 +24,9 @@
     <symbol id="i-oeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
     <symbol id="i-gomme" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v5M14 11v5"/></symbol>
     <symbol id="i-main" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="16" cy="12" r="2.5" fill="currentColor"/></symbol>
+    <symbol id="i-metro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18V7l6 6 6-6v11"/></symbol>
+    <symbol id="i-pluie" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15a4 4 0 0 1-.6-8A5.5 5.5 0 0 1 17 7.5a3.8 3.8 0 0 1 .5 7.5z"/><path d="M9 18l-1 2M13 18l-1 2M17 18l-1 2"/></symbol>
+    <symbol id="i-coche" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></symbol>
     <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z" fill="currentColor"/></symbol>
   </svg>
 
@@ -109,14 +112,17 @@
           </g>
         </svg>
 
-        <div class="cartes" id="cartes">
-          <div class="carte fixe surligne">
-            <div class="tete"><svg aria-hidden="true"><use href="#i-cal"/></svg><span>Agenda</span><span>09:30</span></div>
-            <p><mark>Point d’équipe</mark>, salle B</p>
-          </div>
-          <div class="carte fixe surligne">
-            <div class="tete"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Imprimerie Duval</span><span>07:12</span></div>
-            <p>Devis n° 2481 : <mark>à valider avant jeudi</mark></p>
+        <div class="tel-scene" aria-hidden="true">
+          <div class="tel-ecran">
+            <div class="tel-haut"><span>Ce matin</span><span>6:30</span></div>
+            <ul class="flux" id="flux">
+              <li class="actif" data-phrase="Ta journée commence à 9 h 30 avec le point d’équipe, en salle B."><i class="src s-agenda"><svg><use href="#i-cal"/></svg></i><div><b>Agenda <em>09:30</em></b><span><mark>Point d’équipe</mark>, salle B</span></div></li>
+              <li class="actif" data-phrase="Ligne 13 : dix minutes de retard ce matin. Pars un peu plus tôt."><i class="src s-metro"><svg><use href="#i-metro"/></svg></i><div><b>Trafic</b><span>Ligne 13 : <mark>+10 min</mark></span></div></li>
+              <li data-phrase="Le devis de l’imprimerie est à valider avant jeudi."><i class="src s-mail"><svg><use href="#i-mail"/></svg></i><div><b>Imprimerie Duval</b><span><mark>Devis à valider jeudi</mark></span></div></li>
+              <li data-pub><i class="src s-pub"><svg><use href="#i-mail"/></svg></i><div><b>Boutique Mode</b><span>-40 % ce week-end</span></div></li>
+              <li data-phrase="Pluie prévue vers 18 heures : pense au parapluie."><i class="src s-meteo"><svg><use href="#i-pluie"/></svg></i><div><b>Météo</b><span>9°, <mark>pluie à 18 h</mark></span></div></li>
+              <li data-phrase="Sarah attend ta réponse sur le planning de décembre."><i class="src s-mail"><svg><use href="#i-mail"/></svg></i><div><b>Sarah Martin</b><span>Planning : <mark>réponse attendue</mark></span></div></li>
+            </ul>
           </div>
         </div>
 

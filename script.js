@@ -8,23 +8,10 @@ document.querySelectorAll('[data-jour]').forEach((el) => {
 });
 document.querySelectorAll('[data-jour-mois]').forEach((el) => (el.textContent = fr({ day: 'numeric', month: 'long' })));
 
-// La scène : des mails et des rendez-vous arrivent, l'essentiel est surligné,
-// puis il file dans le casque et devient une phrase du briefing.
-const ITEMS = [
-  { icone: 'i-cal', de: 'Agenda', quand: '09:30', corps: '<mark>Point d’équipe</mark>, salle B',
-    phrase: 'Ta journée commence à 9 h 30 avec le point d’équipe, en salle B.' },
-  { icone: 'i-mail', de: 'Imprimerie Duval', quand: '07:12', corps: 'Devis n° 2481 : <mark>à valider avant jeudi</mark>',
-    phrase: 'Le devis de l’imprimerie est à valider avant jeudi.' },
-  { icone: 'i-mail', de: 'Boutique Mode', quand: '05:40', corps: '-40 % ce week-end seulement <span class="tag">Pub</span>',
-    phrase: null },
-  { icone: 'i-mail', de: 'Sarah Martin', quand: 'hier', corps: 'Planning de décembre : <mark>tu me réponds ce matin ?</mark>',
-    phrase: 'Sarah attend ta réponse sur le planning de décembre.' },
-  { icone: 'i-cal', de: 'Agenda', quand: '12:30', corps: '<mark>Déjeuner avec Hugo</mark>, confirmé',
-    phrase: 'À midi et demi, tu déjeunes avec Hugo.' },
-];
-
+// La scène : le téléphone récolte l'essentiel (agenda, trafic, mails, météo),
+// chaque info surlignée s'envole vers le casque et devient une phrase du briefing.
 const scene = document.getElementById('scene');
-const cartes = document.getElementById('cartes');
+const flux = document.getElementById('flux');
 const phrase = document.getElementById('phrase');
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 // Attend la fin d'une animation, sans jamais bloquer la boucle si le navigateur ne la termine pas.
@@ -48,48 +35,47 @@ function dire(texte) {
   });
 }
 
-function carte(item) {
-  const c = document.createElement('div');
-  c.className = 'carte';
-  c.innerHTML = `<div class="tete"><svg aria-hidden="true"><use href="#${item.icone}"/></svg><span>${item.de}</span><span>${item.quand}</span></div><p>${item.corps}</p>`;
-  cartes.append(c);
-  c.animate([{ opacity: 0, transform: 'translateX(-24px)' }, { opacity: 1, transform: 'none' }],
-    { duration: 500, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' });
-  return c;
-}
-
-async function vole(c) {
-  const r = c.getBoundingClientRect();
+async function envol(ligne) {
   const s = scene.getBoundingClientRect();
-  const dx = s.left + s.width * CASQUE.x - (r.left + r.width / 2);
-  const dy = s.top + s.height * CASQUE.y - (r.top + r.height / 2);
-  await fin(c.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: `translate(${dx}px, ${dy}px) scale(.12)` }],
-    { duration: 850, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' }), 850);
-  c.remove();
+  const r = ligne.getBoundingClientRect();
+  const puce = document.createElement('div');
+  puce.className = 'envol';
+  puce.textContent = ligne.querySelector('mark').textContent;
+  puce.style.left = `${r.left - s.left + r.width * 0.25}px`;
+  puce.style.top = `${r.top - s.top + r.height * 0.2}px`;
+  scene.append(puce);
+  const p = puce.getBoundingClientRect();
+  const dx = s.left + s.width * CASQUE.x - (p.left + p.width / 2);
+  const dy = s.top + s.height * CASQUE.y - (p.top + p.height / 2);
+  await fin(puce.animate([
+    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+    { transform: `translate(${dx * 0.55}px, ${dy * 0.55 - s.height * 0.12}px) scale(0.9)`, opacity: 1, offset: 0.55 },
+    { transform: `translate(${dx}px, ${dy}px) scale(0.15)`, opacity: 0 },
+  ], { duration: 1100, easing: 'cubic-bezier(.45,0,.55,1)', fill: 'forwards' }), 1100);
+  puce.remove();
 }
 
 async function boucle() {
-  cartes.replaceChildren();
+  const lignes = [...flux.children];
+  lignes.forEach((l) => l.classList.remove('actif', 'lu', 'ecarte'));
   await dire(`Bonjour Camille, nous sommes ${fr({ weekday: 'long', day: 'numeric', month: 'long' })}.`);
   let parole = Promise.resolve();
-  for (const item of ITEMS) {
-    const c = carte(item);
-    await pause(700);
-    if (!item.phrase) { // une pub : écartée, jamais racontée
-      c.classList.add('ecarte');
-      await pause(600);
-      await fin(c.animate([{ opacity: 1 }, { opacity: 0, transform: 'translateY(12px)' }], { duration: 600, fill: 'forwards' }), 600);
-      c.remove();
+  for (const ligne of lignes) {
+    if ('pub' in ligne.dataset) { // une pub : écartée, jamais racontée
+      ligne.classList.add('ecarte');
+      await pause(1100);
       continue;
     }
-    c.classList.add('surligne');
-    await pause(900);
-    await parole; // la phrase précédente se termine avant d'avaler la suivante
-    await vole(c);
-    parole = dire(item.phrase);
+    ligne.classList.add('actif');
+    await pause(1000);
+    await parole; // la phrase précédente se termine avant d'envoyer la suivante
+    const vol = envol(ligne);
+    ligne.classList.replace('actif', 'lu');
+    await vol;
+    parole = dire(ligne.dataset.phrase);
   }
   await parole;
-  await pause(800);
+  await pause(1500);
   boucle();
 }
 
