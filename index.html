@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Briefing : ta journée racontée chaque matin</title>
+  <meta name="description" content="Chaque matin, Briefing lit ton agenda et tes mails, garde l’essentiel et te le raconte en quelques minutes.">
+  <meta name="theme-color" content="#142033">
+  <link rel="preload" href="fonts/source-serif-4.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="night">
+    <header class="top">
+      <a class="brand" href="./">Briefing</a>
+      <nav><a href="confidentialite.html">Confidentialité</a></nav>
+    </header>
+
+    <section class="reading" aria-label="Exemple de briefing">
+      <p class="script" id="script">Bonjour Camille. Nous sommes <span id="today">mardi 24 novembre</span>. Ta journée commence à neuf heures et demie avec le point d’équipe, en salle B. À midi, déjeuner avec Hugo, confirmé hier soir. Côté mails, deux choses attendent ta réponse : le devis de l’imprimeur, à valider avant jeudi, et la question de Sarah sur le planning de décembre. Le reste peut attendre…</p>
+      <div class="track" aria-hidden="true">
+        <div class="bar"><span id="bar"></span></div>
+        <div class="times"><span id="elapsed">0:00</span><span>4:05</span></div>
+      </div>
+      <p class="caption">Exemple de briefing. Les personnes et les rendez-vous sont inventés.</p>
+    </section>
+  </div>
+
+  <main class="about">
+    <p class="lede">Chaque matin, avant ton réveil, Briefing lit ton agenda et les mails de la veille, en garde l’essentiel et te le raconte en quelques minutes. Tu l’écoutes en te préparant, sans ouvrir une seule application.</p>
+
+    <dl class="facts">
+      <div>
+        <dt>Ce qu’il lit</dt>
+        <dd>Ton agenda du jour et tes mails des dernières vingt-quatre heures. Les publicités et les newsletters sont laissées de côté.</dd>
+      </div>
+      <div>
+        <dt>Ce qu’il garde</dt>
+        <dd>Seulement le fichier audio, pendant quatorze jours. Le contenu de tes mails est effacé dès que le briefing est écrit.</dd>
+      </div>
+      <div>
+        <dt>Ce qu’il ne fait pas</dt>
+        <dd>Il n’envoie, ne supprime et ne modifie rien. L’accès à ton compte est en lecture seule, et tu peux le couper à tout moment.</dd>
+      </div>
+    </dl>
+
+    <p class="soon">Bientôt sur iPhone et Android.</p>
+  </main>
+
+  <footer>
+    <a href="confidentialite.html">Politique de confidentialité</a>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

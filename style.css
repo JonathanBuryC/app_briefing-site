@@ -1,0 +1,134 @@
+@font-face {
+  font-family: "Source Serif 4";
+  src: url("fonts/source-serif-4.woff2") format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+:root {
+  /* Le premier écran a la couleur du ciel à 6 h 30 en hiver ; la suite est le jour. */
+  --night: #142033;
+  --night-ink: #fff;
+  --night-pending: #6b7ea3;
+  --night-muted: #9aa9c4;
+  --night-line: #2c3b55;
+
+  --ink: #000;
+  --paper: #fff;
+  --muted: #5f6368;
+  --line: #d6d6d6;
+
+  --serif: "Source Serif 4", ui-serif, Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --edge: clamp(1.5rem, 6vw, 5rem);
+  color-scheme: light; /* palette fixe : la page raconte le passage de la nuit au jour */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 1.125rem/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--night); color: #fff; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.22em; }
+a:hover { text-decoration-thickness: 2px; }
+a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; border-radius: 2px; }
+
+/* ---------- Nuit : l'extrait lu à voix haute ---------- */
+
+.night {
+  background: var(--night);
+  color: var(--night-ink);
+  padding: 0 var(--edge);
+}
+.night ::selection { background: #fff; color: var(--night); }
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: 1.75rem;
+}
+.brand { font: 600 1.375rem var(--serif); text-decoration: none; }
+.top nav a { color: var(--night-muted); font-size: 1rem; }
+
+.reading {
+  min-height: min(calc(100svh - 4rem), 54rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 0 5rem;
+}
+.script {
+  margin: 0;
+  max-width: 20em;
+  font: 400 clamp(1.9rem, 4.8vw, 3.5rem)/1.24 var(--serif);
+  font-optical-sizing: auto;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+}
+.script.live .w { color: var(--night-pending); transition: color 160ms cubic-bezier(0.16, 1, 0.3, 1); }
+.script.live .w.said { color: var(--night-ink); }
+
+.track { margin-top: 2.75rem; max-width: 32rem; }
+.bar { height: 2px; background: var(--night-line); }
+.bar span { display: block; height: 100%; width: 0; background: var(--night-ink); }
+.times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  color: var(--night-muted);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+.caption { margin: 1.5rem 0 0; color: var(--night-muted); font-size: 0.875rem; }
+
+/* ---------- Jour : ce que fait l'app ---------- */
+
+.about { padding: clamp(5rem, 14vh, 9rem) var(--edge) 0; display: grid; gap: 4.5rem; }
+
+.lede {
+  margin: 0;
+  max-width: 30em;
+  font: 400 clamp(1.45rem, 2.6vw, 1.9rem)/1.4 var(--serif);
+  text-wrap: pretty;
+}
+
+.facts { margin: 0; display: grid; gap: 2.25rem; max-width: 54rem; }
+.facts div { display: grid; gap: 0.3rem; }
+.facts dt { font: 600 1.25rem/1.3 var(--serif); }
+.facts dd { margin: 0; color: var(--muted); max-width: 34em; }
+@media (min-width: 48rem) {
+  .facts div { grid-template-columns: 13rem 1fr; gap: 2.5rem; }
+}
+
+.soon { margin: 0; font: 400 1.25rem var(--serif); }
+
+footer {
+  margin: 7rem var(--edge) 0;
+  padding: 1.5rem 0 2.5rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+/* ---------- Politique de confidentialité ---------- */
+
+.night.slim { padding-bottom: 3.5rem; }
+.doc { max-width: calc(44rem + 2 * var(--edge)); padding: 4rem var(--edge) 0; }
+.night .doc-title { font: 400 clamp(2.1rem, 5vw, 3rem)/1.15 var(--serif); margin: 3.5rem 0 0.5rem; }
+.night .updated { color: var(--night-muted); margin: 0; }
+.doc h2 { font: 600 1.375rem/1.3 var(--serif); margin: 3rem 0 0.75rem; }
+.doc h2:first-child { margin-top: 0; }
+.doc li + li { margin-top: 0.5rem; }
+.doc .todo { background: #ffe58f; color: #000; padding: 0 0.25em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .script.live .w { transition: none; }
+}
