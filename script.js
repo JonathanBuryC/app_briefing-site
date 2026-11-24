@@ -34,6 +34,83 @@ const APPS = [
 ];
 const BRIEF = 'Point d’équipe à 9 h 30, ligne 13 en retard, pluie à 18 h et facture EDF avant vendredi.';
 
+// Son : voix française du navigateur pour raconter, et chants d'oiseaux synthétisés
+// (aucun fichier audio : tout est généré dans le navigateur, après un clic du visiteur).
+const boutonSon = document.getElementById('son');
+let sonActif = false;
+let audio = null; // { ctx, oiseaux: GainNode }
+
+function voixFr() {
+  const voix = speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith('fr'));
+  return voix.find((v) => /google|amélie|amelie|thomas|audrey|denise|marie/i.test(v.name)) || voix[0] || null;
+}
+
+function parler(texte, surMot) {
+  if (!sonActif || !('speechSynthesis' in window)) return null;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(texte);
+  u.lang = 'fr-FR';
+  u.rate = 1.05;
+  const v = voixFr();
+  if (v) u.voice = v;
+  if (surMot) u.onboundary = (e) => { if (e.name === 'word' || e.name === undefined) surMot(e.charIndex); };
+  audio?.oiseaux.gain.setTargetAtTime(0.25, audio.ctx.currentTime, 0.2); // on baisse les oiseaux pendant la voix
+  const fini = new Promise((r) => { u.onend = r; u.onerror = r; });
+  fini.then(() => audio?.oiseaux.gain.setTargetAtTime(1, audio.ctx.currentTime, 0.6));
+  speechSynthesis.speak(u);
+  return fini;
+}
+
+function chant(ctx, sortie) {
+  // Une phrase d'oiseau : quelques notes aiguës et rapides, glissées, placées à gauche ou à droite.
+  const t0 = ctx.currentTime + 0.05;
+  const pan = new StereoPannerNode(ctx, { pan: Math.random() * 1.6 - 0.8 });
+  pan.connect(sortie);
+  const trille = Math.random() < 0.5;
+  const notes = trille ? 5 + Math.floor(Math.random() * 6) : 2 + Math.floor(Math.random() * 3);
+  const base = 2600 + Math.random() * 1800;
+  let t = t0;
+  for (let i = 0; i < notes; i++) {
+    const d = trille ? 0.045 + Math.random() * 0.02 : 0.12 + Math.random() * 0.1;
+    const o = new OscillatorNode(ctx, { type: 'sine' });
+    const g = new GainNode(ctx, { gain: 0 });
+    const f = base * (trille ? 1 + Math.random() * 0.15 : 0.8 + Math.random() * 0.5);
+    o.frequency.setValueAtTime(f, t);
+    o.frequency.exponentialRampToValueAtTime(f * (trille ? 1.35 : 0.7 + Math.random() * 0.8), t + d);
+    g.gain.linearRampToValueAtTime(0.5, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.001, t + d);
+    o.connect(g).connect(pan);
+    o.start(t);
+    o.stop(t + d + 0.02);
+    t += d + (trille ? 0.02 : 0.06 + Math.random() * 0.08);
+  }
+  setTimeout(() => sonActif && chant(ctx, sortie), (t - ctx.currentTime) * 1000 + 700 + Math.random() * 2600);
+}
+
+async function basculerSon() {
+  sonActif = !sonActif;
+  boutonSon.setAttribute('aria-pressed', String(sonActif));
+  boutonSon.querySelector('span').textContent = sonActif ? 'Couper le son' : 'Écouter avec le son';
+  if (sonActif) {
+    if (!audio) {
+      const ctx = new AudioContext();
+      const maitre = new GainNode(ctx, { gain: 0.06 });
+      const oiseaux = new GainNode(ctx, { gain: 1 });
+      oiseaux.connect(maitre).connect(ctx.destination);
+      audio = { ctx, oiseaux };
+    }
+    await audio.ctx.resume();
+    chant(audio.ctx, audio.oiseaux);
+    setTimeout(() => sonActif && chant(audio.ctx, audio.oiseaux), 900);
+    parler(phrase.textContent);
+  } else {
+    speechSynthesis?.cancel();
+    audio?.ctx.suspend();
+  }
+}
+boutonSon.addEventListener('click', basculerSon);
+if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => {};
+
 function dire(texte, ms = 260) {
   phrase.replaceChildren(...texte.split(' ').flatMap((mot, i) => {
     const s = document.createElement('span');
@@ -42,6 +119,15 @@ function dire(texte, ms = 260) {
     return i ? [' ', s] : [s];
   }));
   const mots = [...phrase.querySelectorAll('.m')];
+  const debuts = [];
+  texte.split(' ').reduce((pos, mot) => (debuts.push(pos), pos + mot.length + 1), 0);
+  const voix = parler(texte, (car) => mots.forEach((m, k) => debuts[k] <= car && m.classList.add('dit')));
+  if (voix) {
+    return Promise.race([voix, pause(texte.length * 120 + 2000)]).then(() => {
+      mots.forEach((m) => m.classList.add('dit'));
+      return pause(700);
+    });
+  }
   return new Promise((fini) => {
     let i = 0;
     const t = setInterval(() => {
@@ -53,6 +139,7 @@ function dire(texte, ms = 260) {
 
 function statut(texte) {
   phrase.textContent = texte;
+  parler(texte);
 }
 
 function remplir(app) {

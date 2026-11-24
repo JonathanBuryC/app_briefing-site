@@ -204,6 +204,21 @@ h1 {
 .phrase .m { color: rgba(255, 255, 255, 0.35); transition: color 140ms linear; }
 .phrase .m.dit { color: var(--blanc); }
 
+.scene-col { display: grid; justify-items: center; gap: 1rem; }
+.scene-col .scene { width: 100%; }
+.son {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.7rem 1.2rem; border-radius: 999px; border: 0; cursor: pointer;
+  background: var(--blanc); color: var(--encre);
+  font: 600 1rem var(--font);
+  box-shadow: 0 8px 20px -10px rgba(28, 29, 87, 0.4);
+}
+.son svg { width: 20px; height: 20px; color: var(--indigo); }
+.son:hover { background: var(--surligneur); }
+.son[aria-pressed="true"] { background: var(--encre); color: var(--blanc); }
+.son[aria-pressed="true"] svg { color: var(--surligneur); }
+.son:focus-visible { outline: 3px solid var(--indigo); outline-offset: 3px; }
+
 /* ---------- Sections ---------- */
 
 section { padding-block: clamp(4.5rem, 10vw, 8rem); }

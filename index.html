@@ -25,6 +25,7 @@
     <symbol id="i-facture" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
     <symbol id="i-micro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></symbol>
     <symbol id="i-photo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="12" cy="12.5" r="3.5"/></symbol>
+    <symbol id="i-hp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></symbol>
     <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z" fill="currentColor"/></symbol>
   </svg>
 
@@ -43,6 +44,7 @@
         </div>
       </div>
 
+      <div class="scene-col">
       <div class="scene" id="scene">
         <svg viewBox="0 0 600 520" role="img" aria-label="Une personne marche dans la rue au lever du soleil, un casque sur les oreilles. Ses mails et ses rendez-vous du jour lui sont lus.">
           <defs>
@@ -140,6 +142,10 @@
           <span class="barres"><i></i><i></i><i></i><i></i></span>
           <span class="phrase" id="phrase">Point d’équipe à 9 h 30, ligne 13 en retard, pluie à 18 h et facture EDF avant vendredi.</span>
         </div>
+      </div>
+      <button class="son" id="son" type="button" aria-pressed="false">
+        <svg aria-hidden="true"><use href="#i-hp"/></svg><span>Écouter avec le son</span>
+      </button>
       </div>
     </div>
   </div>
