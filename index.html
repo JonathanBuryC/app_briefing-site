@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Briefing : ta journée, racontée en quatre minutes</title>
-  <meta name="description" content="Chaque matin, Briefing lit ton agenda et tes mails, surligne l’essentiel et te le raconte en quatre minutes.">
+  <title>P’tit Brief : ta journée, racontée en quatre minutes</title>
+  <meta name="description" content="Chaque matin, P’tit Brief lit ton agenda et tes mails, surligne l’essentiel et te le raconte en quatre minutes.">
   <meta name="theme-color" content="#ecebff">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
@@ -12,12 +12,7 @@
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="marque" viewBox="0 0 40 40">
-      <rect width="40" height="40" rx="11" fill="#2b2e8c"/>
-      <path d="M9 26a11 11 0 0 1 22 0z" fill="#ffd23f"/>
-      <rect x="8" y="29" width="24" height="3" rx="1.5" fill="#fff"/>
-      <rect x="13" y="34" width="14" height="2.5" rx="1.25" fill="#fff" opacity=".55"/>
-    </symbol>
+    <symbol id="marque" viewBox="0 0 256 256"><rect width="256" height="256" rx="58" fill="#2b2e8c"/><g transform="translate(28 28) scale(.78)"><circle cx="128" cy="100" r="30" fill="#fff"/><rect x="104" y="146" width="48" height="84" rx="24" fill="#fff"/><path fill="#ffd23f" d="M78 98A50 50 0 0 1 178 98H166A38 38 0 0 0 90 98Z"/><rect x="70" y="88" width="20" height="36" rx="10" fill="#ffd23f"/><rect x="166" y="88" width="20" height="36" rx="10" fill="#ffd23f"/></g></symbol>
     <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></symbol>
     <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
     <symbol id="i-tel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></symbol>
@@ -27,19 +22,22 @@
     <symbol id="i-metro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18V7l6 6 6-6v11"/></symbol>
     <symbol id="i-pluie" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15a4 4 0 0 1-.6-8A5.5 5.5 0 0 1 17 7.5a3.8 3.8 0 0 1 .5 7.5z"/><path d="M9 18l-1 2M13 18l-1 2M17 18l-1 2"/></symbol>
     <symbol id="i-coche" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></symbol>
+    <symbol id="i-facture" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></symbol>
+    <symbol id="i-micro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/></symbol>
+    <symbol id="i-photo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="3"/><circle cx="12" cy="12.5" r="3.5"/></symbol>
     <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z" fill="currentColor"/></symbol>
   </svg>
 
   <div class="hero">
     <header class="wrap top">
-      <a class="logo" href="./"><svg aria-hidden="true"><use href="#marque"/></svg>briefing</a>
+      <a class="logo" href="./"><svg aria-hidden="true"><use href="#marque"/></svg>P’tit Brief</a>
       <nav><a href="confidentialite.html">Confidentialité</a></nav>
     </header>
 
     <div class="wrap hero-grid">
       <div>
         <h1>Ta journée, racontée en quatre minutes.</h1>
-        <p class="intro">Chaque matin, Briefing lit ton agenda et tes mails, surligne l’essentiel et te le raconte. Tu l’écoutes dans la rue, le métro ou en te préparant.</p>
+        <p class="intro">Chaque matin, P’tit Brief lit ton agenda et tes mails, surligne l’essentiel et te le raconte. Tu l’écoutes dans la rue, le métro ou en te préparant.</p>
         <div class="bientot">
           <span class="store"><svg aria-hidden="true"><use href="#i-tel"/></svg>Bientôt sur iPhone et Android</span>
         </div>
@@ -74,7 +72,7 @@
           </defs>
 
           <rect width="600" height="520" fill="url(#ciel)"/>
-          <circle class="soleil" cx="470" cy="190" r="58" fill="#ffd23f"/>
+          <circle class="soleil" cx="532" cy="218" r="46" fill="#ffd23f"/>
           <g class="loin" fill="#b3adf2"><use href="#ville-loin"/><use href="#ville-loin" x="600"/></g>
           <g class="pres"><use href="#ville-pres"/><use href="#ville-pres" x="600"/></g>
           <rect y="430" width="600" height="22" fill="#f3f1ff"/>
@@ -113,22 +111,34 @@
         </svg>
 
         <div class="tel-scene" aria-hidden="true">
-          <div class="tel-ecran">
-            <div class="tel-haut"><span>Ce matin</span><span>6:30</span></div>
-            <ul class="flux" id="flux">
-              <li class="actif" data-phrase="Ta journée commence à 9 h 30 avec le point d’équipe, en salle B."><i class="src s-agenda"><svg><use href="#i-cal"/></svg></i><div><b>Agenda <em>09:30</em></b><span><mark>Point d’équipe</mark>, salle B</span></div></li>
-              <li class="actif" data-phrase="Ligne 13 : dix minutes de retard ce matin. Pars un peu plus tôt."><i class="src s-metro"><svg><use href="#i-metro"/></svg></i><div><b>Trafic</b><span>Ligne 13 : <mark>+10 min</mark></span></div></li>
-              <li data-phrase="Le devis de l’imprimerie est à valider avant jeudi."><i class="src s-mail"><svg><use href="#i-mail"/></svg></i><div><b>Imprimerie Duval</b><span><mark>Devis à valider jeudi</mark></span></div></li>
-              <li data-pub><i class="src s-pub"><svg><use href="#i-mail"/></svg></i><div><b>Boutique Mode</b><span>-40 % ce week-end</span></div></li>
-              <li data-phrase="Pluie prévue vers 18 heures : pense au parapluie."><i class="src s-meteo"><svg><use href="#i-pluie"/></svg></i><div><b>Météo</b><span>9°, <mark>pluie à 18 h</mark></span></div></li>
-              <li data-phrase="Sarah attend ta réponse sur le planning de décembre."><i class="src s-mail"><svg><use href="#i-mail"/></svg></i><div><b>Sarah Martin</b><span>Planning : <mark>réponse attendue</mark></span></div></li>
-            </ul>
+          <div class="tel-ecran" id="ecran">
+            <div class="accueil">
+              <span class="appicone" data-app="Mails"><i style="background:#5b5fd6"><svg><use href="#i-mail"/></svg></i>Mails</span>
+              <span class="appicone" data-app="Agenda"><i style="background:#2b2e8c"><svg><use href="#i-cal"/></svg></i>Agenda</span>
+              <span class="appicone" data-app="Météo"><i style="background:#7fa7e8"><svg><use href="#i-pluie"/></svg></i>Météo</span>
+              <span class="appicone" data-app="Trafic"><i style="background:#ffd23f;color:#17183b"><svg><use href="#i-metro"/></svg></i>Trafic</span>
+              <span class="appicone" data-app="Factures"><i style="background:#3fae8c"><svg><use href="#i-facture"/></svg></i>Factures</span>
+              <span class="appicone"><i style="background:#c9c7dd"><svg><use href="#i-photo"/></svg></i>Photos</span>
+            </div>
+            <div class="appli ouverte" id="appli">
+              <header><i style="background:#5b5fd6"><svg><use href="#i-mail"/></svg></i><span>Mails</span></header>
+              <ul class="lignes">
+                <li class="cle"><b>Imprimerie Duval</b><span>Devis à valider avant jeudi</span></li>
+                <li><b>Boutique Mode</b><span>-40 % ce week-end</span></li>
+                <li><b>Sarah Martin</b><span>Planning de décembre</span></li>
+              </ul>
+            </div>
           </div>
+        </div>
+
+        <div class="collecteur" aria-hidden="true">
+          <div class="orbe" id="orbe"><svg><use href="#i-micro"/></svg><span class="ia">IA</span></div>
+          <span class="compte" id="compte">5 infos pour ton brief</span>
         </div>
 
         <div class="sous-titre" aria-hidden="true">
           <span class="barres"><i></i><i></i><i></i><i></i></span>
-          <span class="phrase" id="phrase">Ta journée commence à 9 h 30 avec le point d’équipe, en salle B.</span>
+          <span class="phrase" id="phrase">Point d’équipe à 9 h 30, ligne 13 en retard, pluie à 18 h et facture EDF avant vendredi.</span>
         </div>
       </div>
     </div>
@@ -137,7 +147,7 @@
   <main>
     <section class="wrap">
       <h2>De ta boîte mail à tes oreilles.</h2>
-      <p class="chapo">Pas de résumé générique : Briefing ne te parle que de ce qui t’attend aujourd’hui.</p>
+      <p class="chapo">Pas de résumé générique : P’tit Brief ne te parle que de ce qui t’attend aujourd’hui.</p>
       <ol class="etapes">
         <li class="etape">
           <div class="vignette v-lit" aria-hidden="true">
@@ -200,12 +210,12 @@
     <section class="confiance">
       <div class="wrap">
         <h2>Tes mails restent à toi.</h2>
-        <p class="chapo">Briefing lit, résume, puis oublie.</p>
+        <p class="chapo">P’tit Brief lit, résume, puis oublie.</p>
         <div class="promesses">
           <div>
             <svg aria-hidden="true"><use href="#i-oeil"/></svg>
             <h3>Lecture seule</h3>
-            <p>Briefing ne peut ni envoyer, ni supprimer, ni modifier quoi que ce soit dans ton compte.</p>
+            <p>P’tit Brief ne peut ni envoyer, ni supprimer, ni modifier quoi que ce soit dans ton compte.</p>
           </div>
           <div>
             <svg aria-hidden="true"><use href="#i-gomme"/></svg>
@@ -226,7 +236,7 @@
       <div class="wrap">
         <svg class="marque" aria-hidden="true"><use href="#marque"/></svg>
         <h2>Ton premier briefing, demain matin.</h2>
-        <p>Briefing arrive bientôt sur iPhone et Android.</p>
+        <p>P’tit Brief arrive bientôt sur iPhone et Android.</p>
         <span class="store"><svg aria-hidden="true"><use href="#i-tel"/></svg>Bientôt disponible</span>
       </div>
     </section>
@@ -234,7 +244,7 @@
 
   <footer>
     <div class="wrap">
-      <span>© 2026 Briefing</span>
+      <span>© 2026 P’tit Brief</span>
       <a href="confidentialite.html">Politique de confidentialité</a>
     </div>
   </footer>
