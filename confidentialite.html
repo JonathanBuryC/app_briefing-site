@@ -4,22 +4,34 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Politique de confidentialité : Briefing</title>
-  <meta name="theme-color" content="#142033">
-  <link rel="preload" href="fonts/source-serif-4.woff2" as="font" type="font/woff2" crossorigin>
+  <meta name="theme-color" content="#ecebff">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
   <meta name="description" content="Quelles données Briefing utilise, pourquoi, combien de temps et avec qui.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="night slim">
-    <header class="top">
-      <a class="brand" href="./">Briefing</a>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="marque" viewBox="0 0 40 40">
+      <rect width="40" height="40" rx="11" fill="#2b2e8c"/>
+      <path d="M9 26a11 11 0 0 1 22 0z" fill="#ffd23f"/>
+      <rect x="8" y="29" width="24" height="3" rx="1.5" fill="#fff"/>
+      <rect x="13" y="34" width="14" height="2.5" rx="1.25" fill="#fff" opacity=".55"/>
+    </symbol>
+  </svg>
+
+  <div class="entete-doc">
+    <header class="wrap top">
+      <a class="logo" href="./"><svg aria-hidden="true"><use href="#marque"/></svg>briefing</a>
       <nav><a href="./">Accueil</a></nav>
     </header>
-    <h1 class="doc-title">Politique de confidentialité</h1>
-    <p class="updated">Dernière mise à jour : 24 novembre 2026</p>
+    <div class="wrap">
+      <h1>Politique de confidentialité</h1>
+      <p class="maj">Dernière mise à jour : 24 novembre 2026</p>
+    </div>
   </div>
 
-  <main class="doc">
+  <main class="wrap doc">
       <p>Briefing prépare chaque matin un résumé audio de ton agenda et de tes mails. Cette page explique quelles données l’application utilise, ce qu’elle en fait, combien de temps elle les garde et avec qui elle les partage.</p>
 
       <h2>Ce que Briefing lit</h2>
@@ -63,7 +75,10 @@
   </main>
 
   <footer>
-    <a href="./">Accueil</a>
+    <div class="wrap">
+      <span>© 2026 Briefing</span>
+      <a href="./">Accueil</a>
+    </div>
   </footer>
 </body>
 </html>

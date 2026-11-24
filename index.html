@@ -3,52 +3,234 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Briefing : ta journée racontée chaque matin</title>
-  <meta name="description" content="Chaque matin, Briefing lit ton agenda et tes mails, garde l’essentiel et te le raconte en quelques minutes.">
-  <meta name="theme-color" content="#142033">
-  <link rel="preload" href="fonts/source-serif-4.woff2" as="font" type="font/woff2" crossorigin>
+  <title>Briefing : ta journée, racontée en quatre minutes</title>
+  <meta name="description" content="Chaque matin, Briefing lit ton agenda et tes mails, surligne l’essentiel et te le raconte en quatre minutes.">
+  <meta name="theme-color" content="#ecebff">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="night">
-    <header class="top">
-      <a class="brand" href="./">Briefing</a>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="marque" viewBox="0 0 40 40">
+      <rect width="40" height="40" rx="11" fill="#2b2e8c"/>
+      <path d="M9 26a11 11 0 0 1 22 0z" fill="#ffd23f"/>
+      <rect x="8" y="29" width="24" height="3" rx="1.5" fill="#fff"/>
+      <rect x="13" y="34" width="14" height="2.5" rx="1.25" fill="#fff" opacity=".55"/>
+    </symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m4 7 8 6 8-6"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-tel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></symbol>
+    <symbol id="i-oeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-gomme" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v5M14 11v5"/></symbol>
+    <symbol id="i-main" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="16" cy="12" r="2.5" fill="currentColor"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z" fill="currentColor"/></symbol>
+  </svg>
+
+  <div class="hero">
+    <header class="wrap top">
+      <a class="logo" href="./"><svg aria-hidden="true"><use href="#marque"/></svg>briefing</a>
       <nav><a href="confidentialite.html">Confidentialité</a></nav>
     </header>
 
-    <section class="reading" aria-label="Exemple de briefing">
-      <p class="script" id="script">Bonjour Camille. Nous sommes <span id="today">mardi 24 novembre</span>. Ta journée commence à neuf heures et demie avec le point d’équipe, en salle B. À midi, déjeuner avec Hugo, confirmé hier soir. Côté mails, deux choses attendent ta réponse : le devis de l’imprimeur, à valider avant jeudi, et la question de Sarah sur le planning de décembre. Le reste peut attendre…</p>
-      <div class="track" aria-hidden="true">
-        <div class="bar"><span id="bar"></span></div>
-        <div class="times"><span id="elapsed">0:00</span><span>4:05</span></div>
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Ta journée, racontée en quatre minutes.</h1>
+        <p class="intro">Chaque matin, Briefing lit ton agenda et tes mails, surligne l’essentiel et te le raconte. Tu l’écoutes dans la rue, le métro ou en te préparant.</p>
+        <div class="bientot">
+          <span class="store"><svg aria-hidden="true"><use href="#i-tel"/></svg>Bientôt sur iPhone et Android</span>
+        </div>
       </div>
-      <p class="caption">Exemple de briefing. Les personnes et les rendez-vous sont inventés.</p>
-    </section>
+
+      <div class="scene" id="scene">
+        <svg viewBox="0 0 600 520" role="img" aria-label="Une personne marche dans la rue au lever du soleil, un casque sur les oreilles. Ses mails et ses rendez-vous du jour lui sont lus.">
+          <defs>
+            <linearGradient id="ciel" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#c9c4ff"/>
+              <stop offset="0.8" stop-color="#ffdcc6"/>
+            </linearGradient>
+            <g id="ville-loin">
+              <rect x="0" y="310" width="60" height="120"/><rect x="64" y="260" width="40" height="170"/>
+              <rect x="108" y="330" width="70" height="100"/><rect x="182" y="280" width="46" height="150"/>
+              <rect x="232" y="340" width="80" height="90"/><rect x="316" y="240" width="36" height="190"/>
+              <rect x="356" y="300" width="64" height="130"/><rect x="424" y="270" width="50" height="160"/>
+              <rect x="478" y="320" width="72" height="110"/><rect x="554" y="290" width="46" height="140"/>
+            </g>
+            <g id="ville-pres">
+              <rect x="20" y="280" width="130" height="150" rx="4" fill="#8b84e6"/>
+              <g fill="#fff3c4"><rect x="38" y="298" width="20" height="24" rx="3"/><rect x="75" y="298" width="20" height="24" rx="3"/><rect x="112" y="298" width="20" height="24" rx="3"/><rect x="38" y="336" width="20" height="24" rx="3"/><rect x="112" y="336" width="20" height="24" rx="3"/></g>
+              <rect x="14" y="384" width="142" height="12" rx="6" fill="#ffd23f"/>
+              <rect x="186" y="380" width="8" height="50" fill="#4b3f8f"/><circle cx="190" cy="366" r="28" fill="#6f67d8"/>
+              <rect x="248" y="330" width="4" height="100" fill="#2b2e8c"/><rect x="238" y="324" width="24" height="7" rx="3.5" fill="#2b2e8c"/><circle cx="250" cy="336" r="5" fill="#ffd23f"/>
+              <rect x="296" y="240" width="112" height="190" rx="4" fill="#7a72dc"/>
+              <g fill="#fff3c4"><rect x="316" y="260" width="22" height="26" rx="3"/><rect x="366" y="260" width="22" height="26" rx="3"/><rect x="316" y="302" width="22" height="26" rx="3"/><rect x="366" y="344" width="22" height="26" rx="3"/></g>
+              <rect x="448" y="352" width="5" height="78" fill="#2b2e8c"/><circle cx="450.5" cy="344" r="16" fill="#ffd23f"/>
+              <path d="M442 352v-15l8.5 9 8.5-9v15" fill="none" stroke="#2b2e8c" stroke-width="3.5" stroke-linejoin="round"/>
+              <rect x="516" y="378" width="8" height="52" fill="#4b3f8f"/><circle cx="520" cy="362" r="32" fill="#6f67d8"/>
+            </g>
+          </defs>
+
+          <rect width="600" height="520" fill="url(#ciel)"/>
+          <circle class="soleil" cx="470" cy="190" r="58" fill="#ffd23f"/>
+          <g class="loin" fill="#b3adf2"><use href="#ville-loin"/><use href="#ville-loin" x="600"/></g>
+          <g class="pres"><use href="#ville-pres"/><use href="#ville-pres" x="600"/></g>
+          <rect y="430" width="600" height="22" fill="#f3f1ff"/>
+          <rect y="452" width="600" height="68" fill="#2b2e8c"/>
+          <line class="route" x1="0" y1="486" x2="660" y2="486" stroke="#fff" stroke-opacity=".45" stroke-width="4" stroke-dasharray="30 30"/>
+
+          <g class="marcheur" transform="translate(360 432)">
+            <!-- bras arrière -->
+            <g class="membre bras"><rect x="-20" y="-168" width="40" height="84" fill="none"/><rect x="-8" y="-168" width="16" height="72" rx="8" fill="#232678"/><circle cx="0" cy="-94" r="8" fill="#b97a52"/></g>
+            <!-- jambes -->
+            <g class="membre"><rect x="-24" y="-92" width="48" height="94" fill="none"/><rect x="-10" y="-92" width="20" height="86" rx="10" fill="#14154a"/><rect x="-11" y="-12" width="30" height="13" rx="6.5" fill="#fff"/></g>
+            <g class="membre b"><rect x="-24" y="-92" width="48" height="94" fill="none"/><rect x="-10" y="-92" width="20" height="86" rx="10" fill="#1e2068"/><rect x="-11" y="-12" width="30" height="13" rx="6.5" fill="#fff"/></g>
+            <!-- manteau -->
+            <path d="M-27 -172Q-32 -122-29-78H29Q32-122 25-172Q0-184-27-172Z" fill="#3b3fb6"/>
+            <rect x="-22" y="-184" width="44" height="15" rx="7.5" fill="#ffd23f"/>
+            <rect x="6" y="-178" width="13" height="42" rx="6.5" fill="#ffd23f"/>
+            <rect x="-7" y="-194" width="14" height="14" fill="#b97a52"/>
+            <!-- tête -->
+            <circle cx="2" cy="-213" r="23" fill="#b97a52"/>
+            <circle cx="24" cy="-210" r="5" fill="#b97a52"/>
+            <path d="M-22-214Q-25-241 2-240Q26-240 25-223Q12-228 2-224Q-6-210-14-200Q-25-204-22-214Z" fill="#2a1c3d"/>
+            <circle cx="15" cy="-216" r="2.2" fill="#17183b"/>
+            <path d="M12-204q5 3 9 0" fill="none" stroke="#17183b" stroke-width="2" stroke-linecap="round"/>
+            <!-- casque -->
+            <path d="M-15-227Q2-254 21-229" fill="none" stroke="#17183b" stroke-width="6" stroke-linecap="round"/>
+            <ellipse cx="-2" cy="-212" rx="9" ry="12" fill="#17183b"/>
+            <ellipse cx="-2" cy="-212" rx="4" ry="6" fill="#ffd23f"/>
+            <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">
+              <path class="onde" d="M-30-225q-9 13 0 26"/>
+              <path class="onde" d="M-40-231q-14 19 0 38"/>
+              <path class="onde" d="M-50-237q-19 25 0 50"/>
+            </g>
+            <!-- bras avant, avec le café -->
+            <g class="membre bras b"><rect x="-20" y="-168" width="40" height="86" fill="none"/><rect x="-8" y="-168" width="16" height="72" rx="8" fill="#4549c9"/><circle cx="0" cy="-94" r="8" fill="#b97a52"/><rect x="-1" y="-106" width="16" height="21" rx="3" fill="#fff"/><rect x="-2" y="-109" width="18" height="5" rx="2.5" fill="#ffd23f"/></g>
+          </g>
+        </svg>
+
+        <div class="cartes" id="cartes">
+          <div class="carte fixe surligne">
+            <div class="tete"><svg aria-hidden="true"><use href="#i-cal"/></svg><span>Agenda</span><span>09:30</span></div>
+            <p><mark>Point d’équipe</mark>, salle B</p>
+          </div>
+          <div class="carte fixe surligne">
+            <div class="tete"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Imprimerie Duval</span><span>07:12</span></div>
+            <p>Devis n° 2481 : <mark>à valider avant jeudi</mark></p>
+          </div>
+        </div>
+
+        <div class="sous-titre" aria-hidden="true">
+          <span class="barres"><i></i><i></i><i></i><i></i></span>
+          <span class="phrase" id="phrase">Ta journée commence à 9 h 30 avec le point d’équipe, en salle B.</span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <main class="about">
-    <p class="lede">Chaque matin, avant ton réveil, Briefing lit ton agenda et les mails de la veille, en garde l’essentiel et te le raconte en quelques minutes. Tu l’écoutes en te préparant, sans ouvrir une seule application.</p>
+  <main>
+    <section class="wrap">
+      <h2>De ta boîte mail à tes oreilles.</h2>
+      <p class="chapo">Pas de résumé générique : Briefing ne te parle que de ce qui t’attend aujourd’hui.</p>
+      <ol class="etapes">
+        <li class="etape">
+          <div class="vignette v-lit" aria-hidden="true">
+            <div class="ligne"><b>Agenda</b><span>09:30 Point d’équipe</span></div>
+            <div class="ligne"><b>Imprimerie Duval</b><span>Devis n° 2481</span></div>
+            <div class="ligne"><b>Boutique Mode</b><span>-40 % ce week-end</span></div>
+            <div class="ligne"><b>Sarah Martin</b><span>Planning de décembre</span></div>
+          </div>
+          <h3><b>1.</b>Il lit</h3>
+          <p>Ton agenda du jour et les mails reçus depuis la veille.</p>
+        </li>
+        <li class="etape">
+          <div class="vignette v-garde" aria-hidden="true">
+            <div class="ligne"><mark>Point d’équipe à 9 h 30</mark></div>
+            <div class="ligne"><span>Devis :</span><mark>à valider avant jeudi</mark></div>
+            <div class="ligne terne"><span>-40 % ce week-end</span></div>
+            <div class="ligne"><span>Sarah :</span><mark>attend ta réponse</mark></div>
+          </div>
+          <h3><b>2.</b>Il garde l’essentiel</h3>
+          <p>Les rendez-vous, les échéances, les réponses qu’on attend de toi. Les pubs passent à la trappe.</p>
+        </li>
+        <li class="etape">
+          <div class="vignette v-raconte" aria-hidden="true">
+            <div class="heure">6:30</div>
+            <div class="date" data-date>mardi 24 novembre</div>
+            <div class="notif"><svg><use href="#marque"/></svg><b>Ton briefing est prêt</b><span>4 minutes, 3 rendez-vous et 2 réponses attendues</span></div>
+          </div>
+          <h3><b>3.</b>Il te le raconte</h3>
+          <p>À l’heure que tu choisis, ton briefing t’attend. Une notification, un geste, et tu écoutes.</p>
+        </li>
+      </ol>
+    </section>
 
-    <dl class="facts">
+    <section class="wrap duo">
       <div>
-        <dt>Ce qu’il lit</dt>
-        <dd>Ton agenda du jour et tes mails des dernières vingt-quatre heures. Les publicités et les newsletters sont laissées de côté.</dd>
+        <h2>Les mains libres, la tête claire.</h2>
+        <p class="chapo">Ton briefing se lance comme un podcast. Tu recules, tu avances, tu le réécoutes dans la journée. En quatre minutes, tu sais ce qui compte, sans avoir ouvert une seule appli.</p>
       </div>
-      <div>
-        <dt>Ce qu’il garde</dt>
-        <dd>Seulement le fichier audio, pendant quatorze jours. Le contenu de tes mails est effacé dès que le briefing est écrit.</dd>
+      <div class="telephone" aria-hidden="true">
+        <div class="ecran">
+          <div class="jour" data-jour>Mardi</div>
+          <div class="titre" data-jour-mois>24 novembre</div>
+          <div class="duree">4 min d’écoute</div>
+          <ul class="sommaire">
+            <li><b>3</b>rendez-vous aujourd’hui</li>
+            <li><b>2</b>réponses attendues</li>
+            <li><b>1</b>échéance jeudi</li>
+          </ul>
+          <div class="lecture">
+            <div class="play"><svg><use href="#i-play"/></svg></div>
+            <div class="onde-ecran">
+              <i class="lu" style="height:40%"></i><i class="lu" style="height:70%"></i><i class="lu" style="height:55%"></i><i class="lu" style="height:90%"></i><i class="lu" style="height:60%"></i><i class="lu" style="height:35%"></i><i class="lu" style="height:75%"></i><i class="lu" style="height:50%"></i><i style="height:85%"></i><i style="height:45%"></i><i style="height:65%"></i><i style="height:30%"></i><i style="height:80%"></i><i style="height:55%"></i><i style="height:70%"></i><i style="height:40%"></i><i style="height:60%"></i><i style="height:35%"></i><i style="height:75%"></i><i style="height:50%"></i><i style="height:30%"></i><i style="height:55%"></i>
+            </div>
+            <div class="temps"><span>1:12</span><span>4:05</span></div>
+          </div>
+        </div>
       </div>
-      <div>
-        <dt>Ce qu’il ne fait pas</dt>
-        <dd>Il n’envoie, ne supprime et ne modifie rien. L’accès à ton compte est en lecture seule, et tu peux le couper à tout moment.</dd>
-      </div>
-    </dl>
+    </section>
 
-    <p class="soon">Bientôt sur iPhone et Android.</p>
+    <section class="confiance">
+      <div class="wrap">
+        <h2>Tes mails restent à toi.</h2>
+        <p class="chapo">Briefing lit, résume, puis oublie.</p>
+        <div class="promesses">
+          <div>
+            <svg aria-hidden="true"><use href="#i-oeil"/></svg>
+            <h3>Lecture seule</h3>
+            <p>Briefing ne peut ni envoyer, ni supprimer, ni modifier quoi que ce soit dans ton compte.</p>
+          </div>
+          <div>
+            <svg aria-hidden="true"><use href="#i-gomme"/></svg>
+            <h3>Rien n’est conservé</h3>
+            <p>Le contenu de tes mails est effacé dès que le briefing est écrit. L’audio disparaît au bout de quatorze jours.</p>
+          </div>
+          <div>
+            <svg aria-hidden="true"><use href="#i-main"/></svg>
+            <h3>Tu gardes la main</h3>
+            <p>Tu supprimes ton compte en un geste, et l’accès à Google est coupé aussitôt.</p>
+          </div>
+        </div>
+        <p class="suite"><a href="confidentialite.html">Lire la politique de confidentialité</a></p>
+      </div>
+    </section>
+
+    <section class="final">
+      <div class="wrap">
+        <svg class="marque" aria-hidden="true"><use href="#marque"/></svg>
+        <h2>Ton premier briefing, demain matin.</h2>
+        <p>Briefing arrive bientôt sur iPhone et Android.</p>
+        <span class="store"><svg aria-hidden="true"><use href="#i-tel"/></svg>Bientôt disponible</span>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <a href="confidentialite.html">Politique de confidentialité</a>
+    <div class="wrap">
+      <span>© 2026 Briefing</span>
+      <a href="confidentialite.html">Politique de confidentialité</a>
+    </div>
   </footer>
 
   <script src="script.js"></script>
