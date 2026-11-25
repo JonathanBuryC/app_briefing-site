@@ -81,6 +81,7 @@ function jouer(cle, texte, avancer) {
   baisserOiseaux(true);
   let fini;
   if (enregistrement) {
+    lecture?.a?.pause(); // une seule voix à la fois, même si la phrase d'avant a dépassé son délai
     fini = new Promise((fin) => {
       lecture = { n: ORDRE.indexOf(cle), avancer, fin, a: null };
       lancer(0);
@@ -119,6 +120,7 @@ function lancer(position) {
 
 const choixVoix = document.querySelectorAll('[data-voix]');
 choixVoix.forEach((b) => b.addEventListener('click', () => {
+  if (b.dataset.voix === voix) return;
   voix = b.dataset.voix;
   choixVoix.forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
   if (!sonActif) boutonSon.click(); // choisir une voix, c'est vouloir l'entendre
@@ -204,7 +206,7 @@ function dire(cle) {
   const allumer = (fraction) => mots.forEach((m, k) => k <= fraction * mots.length && m.classList.add('dit'));
   const voix = jouer(cle, texte, allumer);
   if (voix) {
-    return Promise.race([voix, pause(texte.length * 110 + 2500)]).then(() => {
+    return Promise.race([voix, pause(texte.length * 140 + 4000)]).then(() => {
       allumer(1);
       return pause(350);
     });
