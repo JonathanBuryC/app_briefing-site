@@ -47,75 +47,63 @@ const BRIEF = {
 const ORDRE = ['accueil', ...APPS.map((a) => a.nom), 'fin'];
 
 // ---------- Son ----------
-// Voix : un vrai enregistrement (audio/<voix>/brief-N.mp3) s'il existe, sinon la plus belle voix française
-// du navigateur. Oiseaux : synthétisés dans le navigateur, sans fichier.
-// Le son est mis par défaut. Les navigateurs bloquent le son tant que le visiteur n'a rien touché :
-// on essaie tout de suite, puis on le lance au premier clic, toucher ou touche du clavier.
+// Voix : les enregistrements audio/<voix>/brief-N.mp3, joués par Web Audio comme les oiseaux.
+// Une fois le son autorisé (premier toucher), tout passe par le même AudioContext : l'iPhone ne bloque plus
+// les phrases suivantes, et changer de voix reprend au même endroit sans attendre le réseau.
 const boutonSon = document.getElementById('son');
 let sonActif = true;
 let audio = null; // { ctx, oiseaux: GainNode, chante }
-let lecture = null; // la phrase enregistrée en cours : { n, avancer, fin, a }
+let lecture = null; // la phrase en cours : { n, avancer, fin, source, debut, duree }
 let voix = 'sulafat'; // les quatre voix de l'app ; on en change à tout moment
-let enregistrement = null; // true si les enregistrements répondent
+const tampons = {}; // "voix/N" -> Promise<AudioBuffer>
 
-fetch('audio/sulafat/brief-0.mp3', { method: 'HEAD' })
-  .then((r) => { enregistrement = r.ok; })
-  .catch(() => { enregistrement = false; });
-
-function voixFr() {
-  const fr = speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith('fr'));
-  const score = (v) =>
-    (/natural|neural|premium|enhanced|siri/i.test(v.name) ? 4 : 0) +
-    (/amélie|amelie|audrey|denise|vivienne|eloise|google/i.test(v.name) ? 2 : 0) +
-    (v.localService ? 0 : 1);
-  return fr.sort((a, b) => score(b) - score(a))[0] || null;
+function tampon(v, n) {
+  const k = `${v}/${n}`;
+  return (tampons[k] ??= fetch(`audio/${v}/brief-${n}.mp3`)
+    .then((r) => r.arrayBuffer())
+    .then((b) => audio.ctx.decodeAudioData(b))
+    .catch((e) => { delete tampons[k]; throw e; })); // réseau capricieux : on réessaiera
 }
+const precharger = (v) => ORDRE.forEach((_, n) => tampon(v, n).catch(() => {}));
 
 function baisserOiseaux(oui) {
   audio?.oiseaux.gain.setTargetAtTime(oui ? 0.25 : 1, audio.ctx.currentTime, oui ? 0.2 : 0.6);
 }
 
-// Joue une phrase et appelle avancer(fraction) pour faire avancer le sous-titre.
-function jouer(cle, texte, avancer) {
-  if (!sonActif || audio?.ctx.state !== 'running') return null; // son pas encore autorisé : sous-titre seul
-  baisserOiseaux(true);
-  let fini;
-  if (enregistrement) {
-    lecture?.a?.pause(); // une seule voix à la fois, même si la phrase d'avant a dépassé son délai
-    fini = new Promise((fin) => {
-      lecture = { n: ORDRE.indexOf(cle), avancer, fin, a: null };
-      lancer(0);
-    });
-  } else if ('speechSynthesis' in window) {
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(texte);
-    u.lang = 'fr-FR';
-    u.rate = 0.94;
-    const v = voixFr();
-    if (v) u.voice = v;
-    u.onboundary = (e) => avancer(e.charIndex / texte.length);
-    fini = new Promise((r) => { u.onend = r; u.onerror = r; });
-    speechSynthesis.speak(u);
-  } else {
-    return null;
-  }
-  fini.then(() => baisserOiseaux(false));
-  return fini;
+// Coupe la phrase en cours (une seule voix à la fois).
+function arreter() {
+  const l = lecture;
+  lecture = null;
+  l?.source?.stop();
+  l?.fin();
 }
 
-// Lance la phrase en cours dans la voix choisie, à partir de position (0 à 1).
-// Changer de voix en pleine phrase reprend au même endroit : l'animation ne s'arrête pas.
-function lancer(position) {
-  const l = lecture;
-  const a = new Audio(`audio/${voix}/brief-${l.n}.mp3`);
-  const finie = () => l.a === a && l.fin();
-  a.ontimeupdate = () => a.duration && l.avancer(a.currentTime / a.duration);
-  a.onended = finie;
-  a.onerror = finie;
-  if (position) a.addEventListener('loadedmetadata', () => { a.currentTime = position * a.duration; }, { once: true });
-  l.a?.pause();
-  l.a = a;
-  a.play().catch(finie);
+// Joue une phrase et appelle avancer(fraction) pour faire avancer le sous-titre.
+function jouer(cle, avancer) {
+  if (!sonActif || audio?.ctx.state !== 'running') return null; // son pas encore autorisé : sous-titre seul
+  arreter();
+  baisserOiseaux(true);
+  const l = { n: ORDRE.indexOf(cle), avancer, source: null };
+  const fini = new Promise((fin) => { l.fin = fin; });
+  lecture = l;
+  lancer(l, 0);
+  const t = setInterval(() => l.source && avancer((audio.ctx.currentTime - l.debut) / l.duree), 100);
+  return fini.then(() => { clearInterval(t); baisserOiseaux(false); });
+}
+
+// Lance la phrase l dans la voix choisie, à partir de position (0 à 1).
+async function lancer(l, position) {
+  const v = voix;
+  let b;
+  try { b = await tampon(v, l.n); } catch { return l.fin(); }
+  if (lecture !== l || v !== voix) return; // phrase finie, ou autre voix choisie entre-temps
+  const s = new AudioBufferSourceNode(audio.ctx, { buffer: b });
+  s.connect(audio.ctx.destination);
+  s.onended = () => l.source === s && l.fin();
+  const depart = position * b.duration;
+  l.source?.stop();
+  Object.assign(l, { source: s, duree: b.duration, debut: audio.ctx.currentTime - depart });
+  s.start(0, depart);
 }
 
 const choixVoix = document.querySelectorAll('[data-voix]');
@@ -123,9 +111,10 @@ choixVoix.forEach((b) => b.addEventListener('click', () => {
   if (b.dataset.voix === voix) return;
   voix = b.dataset.voix;
   choixVoix.forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
+  precharger(voix);
   if (!sonActif) boutonSon.click(); // choisir une voix, c'est vouloir l'entendre
-  const a = lecture?.a;
-  if (a && !a.paused && !a.ended) lancer(a.duration ? a.currentTime / a.duration : 0);
+  const l = lecture;
+  if (l) lancer(l, l.source ? Math.min((audio.ctx.currentTime - l.debut) / l.duree, 0.99) : 0);
 }));
 
 function chant(ctx, sortie) {
@@ -171,24 +160,26 @@ function allumerSon() {
     ctx.onstatechange = lancerOiseaux;
   }
   audio.ctx.resume().catch(() => {});
+  // iPhone : un son muet joué pendant le toucher déverrouille l'audio de la page.
+  const muet = new AudioBufferSourceNode(audio.ctx, { buffer: audio.ctx.createBuffer(1, 1, 22050) });
+  muet.connect(audio.ctx.destination);
+  muet.start();
   lancerOiseaux();
 }
 
-const gestes = ['pointerdown', 'keydown', 'touchstart'];
-function auPremierGeste() {
-  gestes.forEach((g) => removeEventListener(g, auPremierGeste, true));
-  if (sonActif) allumerSon();
-}
-gestes.forEach((g) => addEventListener(g, auPremierGeste, true));
+// Le son par défaut : on essaie tout de suite, puis à chaque geste tant qu'il n'est pas autorisé.
+if (navigator.audioSession) navigator.audioSession.type = 'playback'; // iPhone : joue même en mode silencieux
+['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'].forEach((g) =>
+  addEventListener(g, () => sonActif && audio.ctx.state !== 'running' && allumerSon(), true));
 allumerSon();
+precharger(voix);
 
 boutonSon.addEventListener('click', () => {
   sonActif = !sonActif;
   boutonSon.setAttribute('aria-label', sonActif ? 'Couper le son' : 'Remettre le son');
   boutonSon.classList.toggle('muet', !sonActif);
   if (sonActif) return allumerSon();
-  lecture?.a?.pause();
-  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  arreter();
   audio?.ctx.suspend();
 });
 
@@ -204,7 +195,7 @@ function dire(cle) {
   }));
   const mots = [...phrase.querySelectorAll('.m')];
   const allumer = (fraction) => mots.forEach((m, k) => k <= fraction * mots.length && m.classList.add('dit'));
-  const voix = jouer(cle, texte, allumer);
+  const voix = jouer(cle, allumer);
   if (voix) {
     return Promise.race([voix, pause(texte.length * 140 + 4000)]).then(() => {
       allumer(1);
