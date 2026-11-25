@@ -209,19 +209,21 @@ h1 {
 .phrase .m { color: rgba(255, 255, 255, 0.35); transition: color 140ms linear; }
 .phrase .m.dit { color: var(--blanc); }
 
-.scene-col { display: grid; justify-items: center; gap: 1rem; }
+.scene-col { position: relative; }
 .scene-col .scene { width: 100%; }
+/* Petit bouton pour couper le son, mis par défaut (obligatoire : un son qui dure doit pouvoir s'arrêter) */
 .son {
-  display: inline-flex; align-items: center; gap: 0.55rem;
-  padding: 0.7rem 1.2rem; border-radius: 12px; border: 0; cursor: pointer;
-  background: var(--blanc); color: var(--encre);
-  font: 600 1rem var(--font);
-  box-shadow: 0 8px 20px -10px rgba(28, 29, 87, 0.4);
+  position: absolute; top: 0.75rem; right: 0.75rem; z-index: 4;
+  display: grid; place-items: center;
+  width: 2.9rem; height: 2.9rem; border-radius: 10px; border: 0; cursor: pointer;
+  background: rgba(255, 255, 255, 0.92); color: var(--indigo);
+  box-shadow: 0 6px 16px -8px rgba(20, 22, 64, 0.45);
 }
-.son svg { width: 20px; height: 20px; color: var(--indigo); }
-.son:hover { background: var(--surligneur); }
-.son[aria-pressed="true"] { background: var(--encre); color: var(--blanc); }
-.son[aria-pressed="true"] svg { color: var(--surligneur); }
+.son svg { width: 20px; height: 20px; }
+.son:hover { background: var(--surligneur); color: var(--encre); }
+.son .croix { display: none; }
+.son.muet .ondes { display: none; }
+.son.muet .croix { display: inline; }
 .son:focus-visible { outline: 3px solid var(--indigo); outline-offset: 3px; }
 
 /* ---------- Sections ---------- */

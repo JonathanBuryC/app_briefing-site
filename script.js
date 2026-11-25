@@ -48,10 +48,13 @@ const ORDRE = ['accueil', ...APPS.map((a) => a.nom), 'fin'];
 
 // ---------- Son ----------
 // Voix : un vrai enregistrement (audio/brief-N.mp3) s'il existe, sinon la plus belle voix française
-// du navigateur. Oiseaux : synthétisés dans le navigateur, sans fichier. Rien ne joue avant un clic.
+// du navigateur. Oiseaux : synthétisés dans le navigateur, sans fichier.
+// Le son est mis par défaut. Les navigateurs bloquent le son tant que le visiteur n'a rien touché :
+// on essaie tout de suite, puis on le lance au premier clic, toucher ou touche du clavier.
 const boutonSon = document.getElementById('son');
-let sonActif = false;
-let audio = null; // { ctx, oiseaux: GainNode }
+let sonActif = true;
+let audio = null; // { ctx, oiseaux: GainNode, chante }
+let enCours = null; // la phrase enregistrée en train d'être jouée
 let enregistrement = null; // true si audio/brief-0.mp3 répond
 
 fetch('audio/brief-0.mp3', { method: 'HEAD' })
@@ -73,14 +76,13 @@ function baisserOiseaux(oui) {
 
 // Joue une phrase et appelle avancer(fraction) pour faire avancer le sous-titre.
 function jouer(cle, texte, avancer) {
-  if (!sonActif) return null;
+  if (!sonActif || audio?.ctx.state !== 'running') return null; // son pas encore autorisé : sous-titre seul
   baisserOiseaux(true);
   let fini;
   if (enregistrement) {
-    const a = new Audio(`audio/brief-${ORDRE.indexOf(cle)}.mp3`);
+    const a = (enCours = new Audio(`audio/brief-${ORDRE.indexOf(cle)}.mp3`));
     a.ontimeupdate = () => a.duration && avancer(a.currentTime / a.duration);
-    fini = new Promise((r) => { a.onended = r; a.onerror = r; });
-    a.play().catch(() => {});
+    fini = new Promise((r) => { a.onended = r; a.onerror = r; a.play().catch(r); });
   } else if ('speechSynthesis' in window) {
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(texte);
@@ -121,30 +123,46 @@ function chant(ctx, sortie) {
     o.stop(t + d + 0.02);
     t += d + (trille ? 0.02 : 0.06 + Math.random() * 0.08);
   }
-  setTimeout(() => sonActif && chant(ctx, sortie), (t - ctx.currentTime) * 1000 + 700 + Math.random() * 2600);
+  setTimeout(() => (sonActif ? chant(ctx, sortie) : (audio.chante = false)), (t - ctx.currentTime) * 1000 + 700 + Math.random() * 2600);
 }
 
-async function basculerSon() {
-  sonActif = !sonActif;
-  boutonSon.setAttribute('aria-pressed', String(sonActif));
-  boutonSon.querySelector('span').textContent = sonActif ? 'Couper le son' : 'Écouter avec le son';
-  if (sonActif) {
-    if (!audio) {
-      const ctx = new AudioContext();
-      const maitre = new GainNode(ctx, { gain: 0.06 });
-      const oiseaux = new GainNode(ctx, { gain: 1 });
-      oiseaux.connect(maitre).connect(ctx.destination);
-      audio = { ctx, oiseaux };
-    }
-    await audio.ctx.resume();
-    chant(audio.ctx, audio.oiseaux);
-    setTimeout(() => sonActif && chant(audio.ctx, audio.oiseaux), 900);
-  } else {
-    if ('speechSynthesis' in window) speechSynthesis.cancel();
-    audio?.ctx.suspend();
-  }
+function lancerOiseaux() {
+  if (!sonActif || audio.chante || audio.ctx.state !== 'running') return;
+  audio.chante = true;
+  chant(audio.ctx, audio.oiseaux);
+  setTimeout(() => sonActif && chant(audio.ctx, audio.oiseaux), 900);
 }
-boutonSon.addEventListener('click', basculerSon);
+
+function allumerSon() {
+  if (!audio) {
+    const ctx = new AudioContext();
+    const maitre = new GainNode(ctx, { gain: 0.06 });
+    const oiseaux = new GainNode(ctx, { gain: 1 });
+    oiseaux.connect(maitre).connect(ctx.destination);
+    audio = { ctx, oiseaux, chante: false };
+    ctx.onstatechange = lancerOiseaux;
+  }
+  audio.ctx.resume().catch(() => {});
+  lancerOiseaux();
+}
+
+const gestes = ['pointerdown', 'keydown', 'touchstart'];
+function auPremierGeste() {
+  gestes.forEach((g) => removeEventListener(g, auPremierGeste, true));
+  if (sonActif) allumerSon();
+}
+gestes.forEach((g) => addEventListener(g, auPremierGeste, true));
+allumerSon();
+
+boutonSon.addEventListener('click', () => {
+  sonActif = !sonActif;
+  boutonSon.setAttribute('aria-label', sonActif ? 'Couper le son' : 'Remettre le son');
+  boutonSon.classList.toggle('muet', !sonActif);
+  if (sonActif) return allumerSon();
+  enCours?.pause();
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  audio?.ctx.suspend();
+});
 
 // ---------- Sous-titre ----------
 // Affiche une phrase du brief et l'allume mot à mot, au rythme de la voix si le son est activé.
