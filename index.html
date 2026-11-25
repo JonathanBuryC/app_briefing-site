@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>P’tit Brief : ta journée, racontée en quatre minutes</title>
   <meta name="description" content="Chaque matin, P’tit Brief lit ton agenda et tes mails, surligne l’essentiel et te le raconte en quatre minutes.">
-  <meta name="theme-color" content="#ecebff">
+  <meta name="theme-color" content="#f2f3f9">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -49,8 +50,8 @@
         <svg viewBox="0 0 600 520" role="img" aria-label="Une personne marche dans la rue au lever du soleil, un casque sur les oreilles. Ses mails et ses rendez-vous du jour lui sont lus.">
           <defs>
             <linearGradient id="ciel" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#c9c4ff"/>
-              <stop offset="0.8" stop-color="#ffdcc6"/>
+              <stop offset="0" stop-color="#dfe2f5"/>
+              <stop offset="0.8" stop-color="#fff1c9"/>
             </linearGradient>
             <g id="ville-loin">
               <rect x="0" y="310" width="60" height="120"/><rect x="64" y="260" width="40" height="170"/>
@@ -60,24 +61,24 @@
               <rect x="478" y="320" width="72" height="110"/><rect x="554" y="290" width="46" height="140"/>
             </g>
             <g id="ville-pres">
-              <rect x="20" y="280" width="130" height="150" rx="4" fill="#8b84e6"/>
+              <rect x="20" y="280" width="130" height="150" rx="4" fill="#8a8fc9"/>
               <g fill="#fff3c4"><rect x="38" y="298" width="20" height="24" rx="3"/><rect x="75" y="298" width="20" height="24" rx="3"/><rect x="112" y="298" width="20" height="24" rx="3"/><rect x="38" y="336" width="20" height="24" rx="3"/><rect x="112" y="336" width="20" height="24" rx="3"/></g>
               <rect x="14" y="384" width="142" height="12" rx="6" fill="#ffd23f"/>
-              <rect x="186" y="380" width="8" height="50" fill="#4b3f8f"/><circle cx="190" cy="366" r="28" fill="#6f67d8"/>
+              <rect x="186" y="380" width="8" height="50" fill="#3c3f7d"/><circle cx="190" cy="366" r="28" fill="#5d62a8"/>
               <rect x="248" y="330" width="4" height="100" fill="#2b2e8c"/><rect x="238" y="324" width="24" height="7" rx="3.5" fill="#2b2e8c"/><circle cx="250" cy="336" r="5" fill="#ffd23f"/>
-              <rect x="296" y="240" width="112" height="190" rx="4" fill="#7a72dc"/>
+              <rect x="296" y="240" width="112" height="190" rx="4" fill="#6f74b8"/>
               <g fill="#fff3c4"><rect x="316" y="260" width="22" height="26" rx="3"/><rect x="366" y="260" width="22" height="26" rx="3"/><rect x="316" y="302" width="22" height="26" rx="3"/><rect x="366" y="344" width="22" height="26" rx="3"/></g>
               <rect x="448" y="352" width="5" height="78" fill="#2b2e8c"/><circle cx="450.5" cy="344" r="16" fill="#ffd23f"/>
               <path d="M442 352v-15l8.5 9 8.5-9v15" fill="none" stroke="#2b2e8c" stroke-width="3.5" stroke-linejoin="round"/>
-              <rect x="516" y="378" width="8" height="52" fill="#4b3f8f"/><circle cx="520" cy="362" r="32" fill="#6f67d8"/>
+              <rect x="516" y="378" width="8" height="52" fill="#3c3f7d"/><circle cx="520" cy="362" r="32" fill="#5d62a8"/>
             </g>
           </defs>
 
           <rect width="600" height="520" fill="url(#ciel)"/>
           <circle class="soleil" cx="532" cy="218" r="46" fill="#ffd23f"/>
-          <g class="loin" fill="#b3adf2"><use href="#ville-loin"/><use href="#ville-loin" x="600"/></g>
+          <g class="loin" fill="#b9bce0"><use href="#ville-loin"/><use href="#ville-loin" x="600"/></g>
           <g class="pres"><use href="#ville-pres"/><use href="#ville-pres" x="600"/></g>
-          <rect y="430" width="600" height="22" fill="#f3f1ff"/>
+          <rect y="430" width="600" height="22" fill="#f7f8fc"/>
           <rect y="452" width="600" height="68" fill="#2b2e8c"/>
           <line class="route" x1="0" y1="486" x2="660" y2="486" stroke="#fff" stroke-opacity=".45" stroke-width="4" stroke-dasharray="30 30"/>
 
@@ -96,11 +97,11 @@
             <circle cx="2" cy="-213" r="23" fill="#b97a52"/>
             <circle cx="24" cy="-210" r="5" fill="#b97a52"/>
             <path d="M-22-214Q-25-241 2-240Q26-240 25-223Q12-228 2-224Q-6-210-14-200Q-25-204-22-214Z" fill="#2a1c3d"/>
-            <circle cx="15" cy="-216" r="2.2" fill="#17183b"/>
-            <path d="M12-204q5 3 9 0" fill="none" stroke="#17183b" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="15" cy="-216" r="2.2" fill="#141640"/>
+            <path d="M12-204q5 3 9 0" fill="none" stroke="#141640" stroke-width="2" stroke-linecap="round"/>
             <!-- casque -->
-            <path d="M-15-227Q2-254 21-229" fill="none" stroke="#17183b" stroke-width="6" stroke-linecap="round"/>
-            <ellipse cx="-2" cy="-212" rx="9" ry="12" fill="#17183b"/>
+            <path d="M-15-227Q2-254 21-229" fill="none" stroke="#141640" stroke-width="6" stroke-linecap="round"/>
+            <ellipse cx="-2" cy="-212" rx="9" ry="12" fill="#141640"/>
             <ellipse cx="-2" cy="-212" rx="4" ry="6" fill="#ffd23f"/>
             <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">
               <path class="onde" d="M-30-225q-9 13 0 26"/>
@@ -118,9 +119,9 @@
               <span class="appicone" data-app="Mails"><i style="background:#5b5fd6"><svg><use href="#i-mail"/></svg></i>Mails</span>
               <span class="appicone" data-app="Agenda"><i style="background:#2b2e8c"><svg><use href="#i-cal"/></svg></i>Agenda</span>
               <span class="appicone" data-app="Météo"><i style="background:#7fa7e8"><svg><use href="#i-pluie"/></svg></i>Météo</span>
-              <span class="appicone" data-app="Trafic"><i style="background:#ffd23f;color:#17183b"><svg><use href="#i-metro"/></svg></i>Trafic</span>
+              <span class="appicone" data-app="Trafic"><i style="background:#ffd23f;color:#141640"><svg><use href="#i-metro"/></svg></i>Trafic</span>
               <span class="appicone" data-app="Factures"><i style="background:#3fae8c"><svg><use href="#i-facture"/></svg></i>Factures</span>
-              <span class="appicone"><i style="background:#c9c7dd"><svg><use href="#i-photo"/></svg></i>Photos</span>
+              <span class="appicone"><i style="background:#c8cbe0"><svg><use href="#i-photo"/></svg></i>Photos</span>
             </div>
             <div class="appli ouverte" id="appli">
               <header><i style="background:#5b5fd6"><svg><use href="#i-mail"/></svg></i><span>Mails</span></header>
