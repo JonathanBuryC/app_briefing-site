@@ -212,18 +212,29 @@ h1 {
 .scene-col { position: relative; }
 .scene-col .scene { width: 100%; }
 /* Petit bouton pour couper le son, mis par défaut (obligatoire : un son qui dure doit pouvoir s'arrêter) */
-.son {
-  position: absolute; top: 0.75rem; right: 0.75rem; z-index: 4;
-  display: grid; place-items: center;
-  width: 2.9rem; height: 2.9rem; border-radius: 10px; border: 0; cursor: pointer;
-  background: rgba(255, 255, 255, 0.92); color: var(--indigo);
-  box-shadow: 0 6px 16px -8px rgba(20, 22, 64, 0.45);
+.voix .son {
+  display: grid; place-items: center; align-self: center;
+  width: 2.6rem; height: 2.6rem; padding: 0; margin-left: 0.15rem; border-radius: 10px; border: 0; cursor: pointer;
+  background: var(--lilas); color: var(--indigo);
 }
 .son svg { width: 20px; height: 20px; }
-.son:hover { background: var(--surligneur); color: var(--encre); }
+.voix .son:hover { background: var(--surligneur); color: var(--encre); }
 .son .croix { display: none; }
 .son.muet .ondes { display: none; }
 .son.muet .croix { display: inline; }
+/* Les quatre voix de l'app : on en change à tout moment, la phrase reprend au même endroit */
+.voix { display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 0.4rem; margin-top: 1rem; padding: 0.35rem; border-radius: 14px; background: var(--blanc); box-shadow: 0 8px 20px -14px rgba(20, 22, 64, 0.45); }
+.voix button {
+  display: grid; gap: 0.05rem; justify-items: center;
+  padding: 0.55rem 0.4rem; border: 0; border-radius: 10px; cursor: pointer;
+  background: transparent; color: var(--encre); font: inherit;
+}
+.voix b { font-weight: 700; font-size: 0.98rem; }
+.voix span { font-size: 0.8rem; color: var(--gris); }
+.voix button:hover { background: var(--lilas); }
+.voix button[aria-pressed="true"] { background: var(--indigo); color: var(--blanc); }
+.voix button[aria-pressed="true"] span { color: var(--surligneur); }
+.voix button:focus-visible { outline: 3px solid var(--indigo); outline-offset: 2px; }
 .son:focus-visible { outline: 3px solid var(--indigo); outline-offset: 3px; }
 
 /* ---------- Sections ---------- */

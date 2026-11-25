@@ -47,17 +47,18 @@ const BRIEF = {
 const ORDRE = ['accueil', ...APPS.map((a) => a.nom), 'fin'];
 
 // ---------- Son ----------
-// Voix : un vrai enregistrement (audio/brief-N.mp3) s'il existe, sinon la plus belle voix française
+// Voix : un vrai enregistrement (audio/<voix>/brief-N.mp3) s'il existe, sinon la plus belle voix française
 // du navigateur. Oiseaux : synthétisés dans le navigateur, sans fichier.
 // Le son est mis par défaut. Les navigateurs bloquent le son tant que le visiteur n'a rien touché :
 // on essaie tout de suite, puis on le lance au premier clic, toucher ou touche du clavier.
 const boutonSon = document.getElementById('son');
 let sonActif = true;
 let audio = null; // { ctx, oiseaux: GainNode, chante }
-let enCours = null; // la phrase enregistrée en train d'être jouée
-let enregistrement = null; // true si audio/brief-0.mp3 répond
+let lecture = null; // la phrase enregistrée en cours : { n, avancer, fin, a }
+let voix = 'sulafat'; // les quatre voix de l'app ; on en change à tout moment
+let enregistrement = null; // true si les enregistrements répondent
 
-fetch('audio/brief-0.mp3', { method: 'HEAD' })
+fetch('audio/sulafat/brief-0.mp3', { method: 'HEAD' })
   .then((r) => { enregistrement = r.ok; })
   .catch(() => { enregistrement = false; });
 
@@ -80,9 +81,10 @@ function jouer(cle, texte, avancer) {
   baisserOiseaux(true);
   let fini;
   if (enregistrement) {
-    const a = (enCours = new Audio(`audio/brief-${ORDRE.indexOf(cle)}.mp3`));
-    a.ontimeupdate = () => a.duration && avancer(a.currentTime / a.duration);
-    fini = new Promise((r) => { a.onended = r; a.onerror = r; a.play().catch(r); });
+    fini = new Promise((fin) => {
+      lecture = { n: ORDRE.indexOf(cle), avancer, fin, a: null };
+      lancer(0);
+    });
   } else if ('speechSynthesis' in window) {
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(texte);
@@ -99,6 +101,30 @@ function jouer(cle, texte, avancer) {
   fini.then(() => baisserOiseaux(false));
   return fini;
 }
+
+// Lance la phrase en cours dans la voix choisie, à partir de position (0 à 1).
+// Changer de voix en pleine phrase reprend au même endroit : l'animation ne s'arrête pas.
+function lancer(position) {
+  const l = lecture;
+  const a = new Audio(`audio/${voix}/brief-${l.n}.mp3`);
+  const finie = () => l.a === a && l.fin();
+  a.ontimeupdate = () => a.duration && l.avancer(a.currentTime / a.duration);
+  a.onended = finie;
+  a.onerror = finie;
+  if (position) a.addEventListener('loadedmetadata', () => { a.currentTime = position * a.duration; }, { once: true });
+  l.a?.pause();
+  l.a = a;
+  a.play().catch(finie);
+}
+
+const choixVoix = document.querySelectorAll('[data-voix]');
+choixVoix.forEach((b) => b.addEventListener('click', () => {
+  voix = b.dataset.voix;
+  choixVoix.forEach((c) => c.setAttribute('aria-pressed', String(c === b)));
+  if (!sonActif) boutonSon.click(); // choisir une voix, c'est vouloir l'entendre
+  const a = lecture?.a;
+  if (a && !a.paused && !a.ended) lancer(a.duration ? a.currentTime / a.duration : 0);
+}));
 
 function chant(ctx, sortie) {
   // Une phrase d'oiseau : quelques notes aiguës et rapides, glissées, placées à gauche ou à droite.
@@ -159,7 +185,7 @@ boutonSon.addEventListener('click', () => {
   boutonSon.setAttribute('aria-label', sonActif ? 'Couper le son' : 'Remettre le son');
   boutonSon.classList.toggle('muet', !sonActif);
   if (sonActif) return allumerSon();
-  enCours?.pause();
+  lecture?.a?.pause();
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   audio?.ctx.suspend();
 });

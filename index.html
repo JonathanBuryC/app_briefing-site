@@ -143,9 +143,15 @@
           <span class="phrase" id="phrase">Bonjour Camille, voici ton brief du matin.</span>
         </div>
       </div>
-      <button class="son" id="son" type="button" aria-label="Couper le son">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="ondes" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="croix" d="M17 9.5l5 5m0-5l-5 5"/></svg>
-      </button>
+      <div class="voix" role="group" aria-label="Voix du brief">
+        <button type="button" data-voix="sulafat" aria-pressed="true"><b>Sulafat</b><span>Chaleureuse</span></button>
+        <button type="button" data-voix="charon" aria-pressed="false"><b>Charon</b><span>Claire</span></button>
+        <button type="button" data-voix="kore" aria-pressed="false"><b>Kore</b><span>Posée</span></button>
+        <button type="button" data-voix="puck" aria-pressed="false"><b>Puck</b><span>Enjouée</span></button>
+        <button class="son" id="son" type="button" aria-label="Couper le son">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="ondes" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="croix" d="M17 9.5l5 5m0-5l-5 5"/></svg>
+        </button>
+      </div>
       </div>
     </div>
   </div>
